@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/ImaerAutoCalc" >
+        <file>icon.svg</file>
+    </qresource>
+</RCC>
