@@ -6,7 +6,7 @@
 name=ImaerAutoCalc
 qgisMinimumVersion=3.0
 description=Automatically calculates sum and difference of two groups
-version=1.7.0
+version=2.0.0
 author=Robin van Maaren
 email=rvmrobin@gmail.com
 
