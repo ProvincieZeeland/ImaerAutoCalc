@@ -1,7 +1,7 @@
 import os
 import processing
 from qgis.utils import iface
-from qgis.core import QgsProject, QgsVectorFileWriter, QgsCoordinateTransformContext, QgsVectorLayer, Qgis
+from qgis.core import QgsProject, QgsApplication, QgsVectorFileWriter, QgsCoordinateTransformContext, QgsVectorLayer, Qgis
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal, QTimer
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox, QPushButton
@@ -13,8 +13,8 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def __init__(self, parent=None):
         super(ImaerAutoCalcDockWidget, self).__init__(parent)
-        self.setupUi(self)
-
+        self.setupUi(self)        
+        
         # Initialize variables
         self.project = QgsProject.instance()
         self.root = self.project.layerTreeRoot()
@@ -23,15 +23,22 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.groepoutput = 'Output'
         self.groepexport = 'Export'
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        
+        self.imaerpluginname = 'ÍMAER Plugin'
+        self.qgis_plugins_path = QgsApplication.qgisSettingsDirPath() + '/python/plugins'
+        self.receptorid_oldversion = 'fid'
+        self.receptorid = 'receptor_id'
+        self.depositionsum_oldversion = 'dep_TOTAL'
+        self.depositionsum = 'deposition_nox_nh3_sum'
+
 
         self.startButton.clicked.connect(self.startButtonClicked)
         self.autoButton.clicked.connect(self.autoButtonClicked)
         self.saveButton.clicked.connect(self.saveButtonClicked)
         self.internSald.clicked.connect(self.internSaldClicked)
-        
-        global mimimum_dep
-        mimimum_dep = -0.004444
-    
+        self.mimimum_dep = -0.004444
+
     def closeEvent(self, event):
         self.closingPlugin.emit()
         event.accept()
@@ -69,6 +76,38 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             'OUTPUT':'memory:' + custom_outputname})
         return self.add_to_project(diff_output_layer['OUTPUT'], custom_outputname, self.groepoutput)
 
+    # Function to read version from metadata.txt
+    def get_plugin_version(self, plugin_path):
+        metadata_file = os.path.join(plugin_path, 'metadata.txt')
+        if os.path.exists(metadata_file):
+            with open(metadata_file, 'r') as file:
+                for line in file:
+                    if line.startswith('version='):
+                        return line.strip().split('=')[1].strip()
+                        
+        return 'Version not found'
+
+    def getversionvariables(self):
+        # List all directories (each directory represents a plugin)
+        plugins = [d for d in os.listdir(self.qgis_plugins_path) if os.path.isdir(os.path.join(self.qgis_plugins_path, d))]
+
+        # Get version of ImaerPlugin
+        for plugin in plugins:
+            if plugin == 'ImaerPlugin':
+                plugin_path = os.path.join(self.qgis_plugins_path, plugin)
+                version = self.get_plugin_version(plugin_path)
+                version_id = [x for x in version.split(' ')][1]
+
+        # Check if version is 3.5.0 or greater and set the right columnnames for receptor_id and total_deposition
+        if version_id >= '3.5.0':
+            dep_id = self.receptorid
+            dep = self.depositionsum
+            return dep_id, dep
+        else:
+            dep_id = self.receptorid_oldversion
+            dep = self.depositionsum_oldversion
+            return dep_id, dep
+
     def check_negatives_of_difference_features(self, diff_output):
         def check_messagebar(widget_destroyed):
                     if not widget_destroyed[0]:
@@ -76,12 +115,14 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
         def on_widget_destroyed():
                     widget_destroyed[0] = True
+        
+
+        dep_id, dep = self.getversionvariables()
+
         # Iterate through features in the layer and check for negative values
         for feature in diff_output.getFeatures():
-            dep_id = feature['fid']
-            dep = feature['dep_TOTAL']
             # Ensure the value is numeric and check if it's negative
-            if isinstance(dep, (int, float)) and dep < mimimum_dep:
+            if isinstance(dep, (int, float)) and dep < self.mimimum_dep:
                 widget = iface.messageBar().createMessage("Let op!", f"De laag bevat negatieve waarden. Referentie feature: {dep_id}")
                 button = QPushButton(widget)
                 button.setText("Zoom naar referentie feature")
@@ -298,7 +339,7 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.check_group_exist(self.root, self.groepexport)
         internsald = QgsVectorLayer(diff_output.source(), 'internsald', 'memory')
         internsald_data_provider = internsald.dataProvider()
-        dep_total_idx = internsald.fields().indexFromName('dep_TOTAL')
+        dep_total_idx = internsald.fields().indexFromName(dep)
         
         # Filter values greater than 0
         selected_features = []
