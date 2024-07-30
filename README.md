@@ -1,4 +1,4 @@
-# IMEAR autocalc
+# IMAER AutoCalc
 Adviesbasis voor Effecten van Rijksbeleid Integratie en Uniformering Stikstofdepositie (AERIUS) en InformatieModelAERius (IMAER) bieden rekentools om de ruimte te berekenen en door te voeren. Voor het berekenen van de ruimte kunnen punten, lijnen en vlakken worden gebruikt. Deze worden geconverteerd naar een GML-bestand waarmee de plug-in werkt. Met de AERIUS IMAER QGIS plug-in kunnen GML-bestanden ingeladen worden en worden geconverteerd naar een Geopackage. Vervolgens is het mogelijk om berekeningen van de depositie van NO en NH3 te maken op de hexagoon vlakken. Met de tool is mogelijk om te sommeren, af te trekken en/of het maximum te berekenen. De ImaerAutoCalc plug-in maakt gebruik van deze rekeninstrumenten van de AERIUS IMAER plug-in maar bied een intuïtieve manier om de verschillen in kaart te brengen. Het resultaat is voldoende ruimte of onvoldoende, waarbij onvoldoende de aanvragen moet wachten tot er meer ruimte ter beschikking is.
 
 Getest met IMAER Plugin versie: 3.4.2, 3.5.0
