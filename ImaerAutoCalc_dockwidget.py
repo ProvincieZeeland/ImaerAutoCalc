@@ -116,14 +116,12 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         def on_widget_destroyed():
                     widget_destroyed[0] = True
         
-
         dep_id, dep = self.getversionvariables()
-
         # Iterate through features in the layer and check for negative values
         for feature in diff_output.getFeatures():
             # Ensure the value is numeric and check if it's negative
-            if isinstance(dep, (int, float)) and dep < self.mimimum_dep:
-                widget = iface.messageBar().createMessage("Let op!", f"De laag bevat negatieve waarden. Referentie feature: {dep_id}")
+            if isinstance(feature[dep], (int, float)) and feature[dep] < self.mimimum_dep:
+                widget = iface.messageBar().createMessage("Let op!", f"De laag bevat negatieve waarden. Referentie feature: {feature[dep_id]}")
                 button = QPushButton(widget)
                 button.setText("Zoom naar referentie feature")
 
@@ -132,7 +130,7 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
                 message_bar = iface.messageBar()
                 message_bar.pushWidget(widget, Qgis.Warning)
 
-                widget_destroyed = [False]  # Flag to track widget destruction
+                widget_destroyed = [False]
 
                 if widget is not None:
                     widget.destroyed.connect(on_widget_destroyed)
