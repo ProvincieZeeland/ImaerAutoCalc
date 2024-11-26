@@ -6,14 +6,14 @@
 name=ImaerAutoCalc
 qgisMinimumVersion=3.0
 description=Automatically calculates sum and difference of two groups
-version=2.0.2
+version=2.0.3
 author=Robin van Maaren
 email=rvmrobin@gmail.com
 
 about=Automatically generates the sum and difference of two groups by turning on and off the visability of the layers.
 
-tracker=http://bugs
-repository=http://repo
+tracker= https://github.com/ProvincieZeeland/ImaerAutoCalc/issues
+repository= https://github.com/ProvincieZeeland/ImaerAutoCalc.git
 # End of mandatory metadata
 
 # Recommended items:
@@ -25,7 +25,7 @@ hasProcessingProvider=no
 # Tags are comma separated with spaces allowed
 tags=python
 
-homepage=http://homepage
+homepage= https://github.com/ProvincieZeeland/ImaerAutoCalc
 category=Plugins
 icon=icon.svg
 # experimental flag

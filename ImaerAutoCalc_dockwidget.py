@@ -333,6 +333,7 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             print("Export canceled by the user.")
 
     def internSaldClicked(self):
+        dep_id, dep = self.getversionvariables()
         diff_output = self.project.mapLayersByName('Difference')[0]
         self.check_group_exist(self.root, self.groepexport)
         internsald = QgsVectorLayer(diff_output.source(), 'internsald', 'memory')
