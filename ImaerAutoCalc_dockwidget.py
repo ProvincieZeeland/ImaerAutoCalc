@@ -290,13 +290,13 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         if output_file_path:
 
             driver_name, output_file_path = self.select_driver(output_file_path)
-
+            
             # Export features to GeoPackage
             options = QgsVectorFileWriter.SaveVectorOptions()
             options.driverName = driver_name
             options.fileEncoding = "UTF-8"
             
-            error = QgsVectorFileWriter.writeAsVectorFormatV2(layer,
+            error = QgsVectorFileWriter.writeAsVectorFormatV3(layer,
                                                             output_file_path,
                                                             QgsCoordinateTransformContext(),
                                                             options)
@@ -318,9 +318,9 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
                     print(f'Added the layer {layer_name}')
 
                     # Add multiple styles
-                    style_manager = saved_layer.styleManager()
-                    self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_style.qml'), 'diff_styling')
-                    self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_two_color.qml'), 'default')
+                    #style_manager = saved_layer.styleManager()
+                    #self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_style.qml'), 'diff_styling')
+                    #self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_two_color.qml'), 'default')
 
                     layer_node = self.root.findLayer(saved_layer)
                     layer_node.setExpanded(False)
