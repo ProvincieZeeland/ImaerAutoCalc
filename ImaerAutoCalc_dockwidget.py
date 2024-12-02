@@ -1,7 +1,7 @@
 import os
 import processing
 from qgis.utils import iface
-from qgis.core import QgsProject, QgsApplication, QgsVectorFileWriter, QgsCoordinateTransformContext, QgsVectorLayer, Qgis
+from qgis.core import QgsProject, QgsApplication, QgsVectorFileWriter, QgsCoordinateTransformContext, QgsVectorLayer, Qgis, QgsMapLayer, QgsWkbTypes
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal, QTimer
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox, QPushButton
@@ -145,8 +145,18 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             iface.mapCanvas().setExtent(bbox)
             iface.mapCanvas().refresh()
 
+    def filter_polygon_layer(self, layers_list):
+        polygon_layers = [
+            layer for layer in layers_list
+            if layer.type() == QgsMapLayer.VectorLayer
+            and QgsWkbTypes.geometryType(layer.wkbType()) == QgsWkbTypes.PolygonGeometry
+        ]
+        return polygon_layers
+
     def imaer_sum(self, layers_list, output_name):
         custom_outputname = 'Sum_' + output_name
+
+        layers_list = self.filter_polygon_layer(layers_list)
 
         # IMAER sum processing tool
         output_layer = processing.run("imaer:relate_sum", 
