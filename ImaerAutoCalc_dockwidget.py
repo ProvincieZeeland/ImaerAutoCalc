@@ -25,7 +25,7 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
         
         
-        self.imaerpluginname = 'ÍMAER Plugin'
+        self.imaerpluginname = 'IMAER Plugin'
         self.qgis_plugins_path = QgsApplication.qgisSettingsDirPath() + '/python/plugins'
         self.receptorid_oldversion = 'fid'
         self.receptorid = 'receptor_id'
