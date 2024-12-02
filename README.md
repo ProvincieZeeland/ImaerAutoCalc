@@ -3,7 +3,7 @@ Adviesbasis voor Effecten van Rijksbeleid Integratie en Uniformering Stikstofdep
 
 Getest met IMAER Plugin versie: 3.5.0, 3.6.0
 
-Niet ondersteunde IMAER Plugin versie: < 3.4.2
+Niet ondersteunde IMAER Plugin versie: < 3.5.0
 
 # Inhoud
 1.	Korte handleiding	
