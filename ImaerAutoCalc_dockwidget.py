@@ -328,9 +328,9 @@ class ImaerAutoCalcDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
                     print(f'Added the layer {layer_name}')
 
                     # Add multiple styles
-                    #style_manager = saved_layer.styleManager()
-                    #self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_style.qml'), 'diff_styling')
-                    #self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_two_color.qml'), 'default')
+                    style_manager = saved_layer.styleManager()
+                    self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_style.qml'), 'diff_styling')
+                    self.add_multi_style(saved_layer, os.path.join(self.script_dir, 'diff_two_color.qml'), 'default')
 
                     layer_node = self.root.findLayer(saved_layer)
                     layer_node.setExpanded(False)
